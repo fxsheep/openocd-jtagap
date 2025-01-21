@@ -599,6 +599,9 @@ produced, PDF schematics are easily found and it is easy to make.
 @* A JTAG driver acting as a client for the JTAG VPI server interface.
 @* Link: @url{http://github.com/fjullien/jtag_vpi}
 
+@item @b{jtag_ap}
+@* A JTAG driver that maps into a single JTAG-AP port
+
 @item @b{vdebug}
 @* A driver for Cadence virtual Debug Interface to emulated or simulated targets.
 It implements a client connecting to the vdebug server, which in turn communicates
@@ -2503,6 +2506,11 @@ available at run time.
 Amontec Chameleon in its JTAG Accelerator configuration,
 connected to a PC's EPP mode parallel port.
 This defines some driver-specific commands:
+
+@deffn {Interface Driver} {jtag_ap}
+JTAG-AP is a mechanism to allow legacy JTAG devices to be implemented
+within a CoreSight(tm) systen.
+@end deffn
 
 @deffn {Config Command} {parport port} number
 Specifies either the address of the I/O port (default: 0x378 for LPT1) or

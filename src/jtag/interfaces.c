@@ -36,6 +36,9 @@
  * drivers that were enabled by the @c configure script.
  */
 struct adapter_driver *adapter_drivers[] = {
+#if BUILD_JTAG_AP == 1
+		&jtag_ap_adapter_driver,
+#endif
 #if BUILD_PARPORT == 1
 		&parport_adapter_driver,
 #endif

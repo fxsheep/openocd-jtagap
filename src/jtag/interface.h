@@ -389,6 +389,7 @@ extern struct adapter_driver linuxgpiod_adapter_driver;
 extern struct adapter_driver opendous_adapter_driver;
 extern struct adapter_driver openjtag_adapter_driver;
 extern struct adapter_driver osbdm_adapter_driver;
+extern struct adapter_driver jtag_ap_adapter_driver;
 extern struct adapter_driver parport_adapter_driver;
 extern struct adapter_driver presto_adapter_driver;
 extern struct adapter_driver remote_bitbang_adapter_driver;

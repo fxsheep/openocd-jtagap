@@ -295,6 +295,10 @@ AC_ARG_ADAPTERS([
   LIBJAYLINK_ADAPTERS
   ],[auto])
 
+AC_ARG_ENABLE([jtag-ap],
+  AS_HELP_STRING([--enable-jtag-ap], [Enable building support for JTAG-AP]),
+  [build_jtag_ap=$enableval], [build_jtag_ap=no])
+
 AC_ARG_ENABLE([parport],
   AS_HELP_STRING([--enable-parport], [Enable building the pc parallel port driver]),
   [build_parport=$enableval], [build_parport=no])
@@ -492,6 +496,13 @@ AS_IF([test "x$is_darwin" = "xyes"], [
     AC_DEFINE([IS_DARWIN], [1], [1 if building for Darwin.])
 ], [
     AC_DEFINE([IS_DARWIN], [0], [0 if not building for Darwin.])
+])
+
+AS_IF([test "x$build_jtag_ap" = "xyes"], [
+  build_jtag_ap=yes
+  AC_DEFINE([BUILD_JTAG_AP], [1], [1 if you want the JTAG-AP driver.])
+], [
+  AC_DEFINE([BUILD_JTAG_AP], [0], [0 if you don't want JTAG-AP driver.])
 ])
 
 AS_IF([test "x$build_parport" = "xyes"], [
@@ -765,6 +776,7 @@ AS_IF([test "x$enable_esp_usb_jtag" != "xno"], [
 ])
 
 AM_CONDITIONAL([RELEASE], [test "x$build_release" = "xyes"])
+AM_CONDITIONAL([JTAG_AP], [test "x$build_jtag_ap" = "xyes"])
 AM_CONDITIONAL([PARPORT], [test "x$build_parport" = "xyes"])
 AM_CONDITIONAL([GIVEIO], [test "x$parport_use_giveio" = "xyes"])
 AM_CONDITIONAL([EP93XX], [test "x$build_ep93xx" = "xyes"])

@@ -115,6 +115,30 @@
 #define DP_TARGETSEL_INSTANCEID_SHIFT 28
 
 
+/* JTAG-AP register addresses */
+#define JTAG_AP_REG_CSW		0x00
+#define JTAG_AP_REG_PSEL	0x04
+#define JTAG_AP_REG_PSTA	0x08
+#define JTAG_AP_REG_BRFIFO1	0x10
+#define JTAG_AP_REG_BWFIFO1	0x10
+#define JTAG_AP_REG_BRFIFO2	0x14
+#define JTAG_AP_REG_BWFIFO2	0x14
+#define JTAG_AP_REG_BRFIFO3	0x18
+#define JTAG_AP_REG_BWFIFO3	0x18
+#define JTAG_AP_REG_BRFIFO4	0x1C
+#define JTAG_AP_REG_BWFIFO4	0x1C
+
+/* Fields of the JTAG-AP's CSW register */
+#define CSW_SERACTV_MASK	(1UL << 31)
+#define CSW_WFIFOCNT_POS	28
+#define CSW_WFIFOCNT_MASK	(7UL << CSW_WFIFOCNT_POS)
+#define CSW_RFIFOCNT_POS	24
+#define CSW_RFIFOCNT_MASK	(7UL << CSW_RFIFOCNT_POS)
+#define CSW_PORTCONNECTED_MASK	(1UL << 3)
+#define CSW_SRSTCONNECTED_MASK	(1UL << 2)
+#define CSW_TRST_OUT_MASK	(1UL << 1)
+#define CSW_SRST_OUT_MASK	(1UL << 0)
+
 /* MEM-AP register addresses */
 #define ADIV5_MEM_AP_REG_CSW    (0x00)
 #define ADIV5_MEM_AP_REG_TAR    (0x04)

@@ -207,6 +207,9 @@ endif
 if AM335XGPIO
 DRIVERFILES += %D%/am335xgpio.c
 endif
+if JTAG_AP
+DRIVERFILES += %D%/jtag-ap.c
+endif
 
 DRIVERHEADERS = \
 	%D%/bitbang.h \
