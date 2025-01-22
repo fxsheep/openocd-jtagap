@@ -219,6 +219,7 @@ static void jtag_ap_cmd_pathmove(struct jtag_command *cmd)
 
 		tms_scan_bits++;
 		tap_set_state(*path);
+		path++;
 	}
 
 	jtag_ap_state_execute(tms_scan, tms_scan_bits);
