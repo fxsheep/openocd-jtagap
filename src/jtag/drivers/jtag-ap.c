@@ -53,6 +53,8 @@ static int jtag_ap_thunk_quit(void);
 static int jtag_ap_thunk_dap_read(uint32_t reg, uint32_t *value);
 static int jtag_ap_thunk_dap_write(uint32_t reg, uint32_t value);
 
+static uint32_t jtag_ap_thunk_jtagport;
+
 /*
  * Section 1: the JTAG-AP interface implementation
  */
@@ -65,20 +67,9 @@ static int jtag_ap_init(void)
 		return ERROR_FAIL;
 
 	/* there must be one and only one JTAG-AP port selected */
-	uint32_t psel = 0;
-	jtag_ap_thunk_dap_read(JTAG_AP_REG_PSEL, &psel);
-	for (int port = 0; port < 8; port++)
-		if ((1UL << port) == psel)
-			goto success;
+	uint32_t psel = 1UL << jtag_ap_thunk_jtagport;
+	jtag_ap_thunk_dap_write(JTAG_AP_REG_PSEL, psel);
 
-	if (psel)
-		LOG_ERROR("jtag_ap PSEL register must select only one port");
-	else
-		LOG_ERROR("jtag_ap PSEL register is zero; select one port");
-
-	return ERROR_FAIL;
-
-success:
 	LOG_INFO("jtag_ap driver initialized");
 
 	return ERROR_OK;
@@ -377,6 +368,7 @@ static int jtag_ap_queue(struct jtag_command *cmd_queue)
 COMMAND_HANDLER(jtag_ap_handle_thunk_port_command);
 COMMAND_HANDLER(jtag_ap_handle_thunk_dap_instance);
 COMMAND_HANDLER(jtag_ap_handle_thunk_apsel);
+COMMAND_HANDLER(jtag_ap_handle_thunk_jtagport);
 
 static const struct command_registration jtag_ap_subcommand_handlers[] = {
 	{
@@ -399,6 +391,13 @@ static const struct command_registration jtag_ap_subcommand_handlers[] = {
 		.mode = COMMAND_CONFIG,
 		.help = "number of dap AP on the remote server providing JTAG-AP",
 		.usage = "ap_num",
+	},
+	{
+		.name = "jtagport",
+		.handler = jtag_ap_handle_thunk_jtagport,
+		.mode = COMMAND_CONFIG,
+		.help = "number(0-7) of JTAG port to use on JTAG-AP",
+		.usage = "jtag_port",
 	},
 	COMMAND_REGISTRATION_DONE,
 };
@@ -475,6 +474,19 @@ COMMAND_HANDLER(jtag_ap_handle_thunk_apsel)
 		if (apsel > DP_APSEL_MAX)
 			return ERROR_COMMAND_SYNTAX_ERROR;
 		jtag_ap_thunk_apsel = apsel;
+		return ERROR_OK;
+	}
+	return ERROR_COMMAND_SYNTAX_ERROR;
+}
+
+COMMAND_HANDLER(jtag_ap_handle_thunk_jtagport)
+{
+	if (CMD_ARGC == 1) {
+		uint32_t jtagport;
+		COMMAND_PARSE_NUMBER(u32, CMD_ARGV[0], jtagport);
+		if (jtagport > 7)
+			return ERROR_COMMAND_SYNTAX_ERROR;
+		jtag_ap_thunk_jtagport = jtagport;
 		return ERROR_OK;
 	}
 	return ERROR_COMMAND_SYNTAX_ERROR;
